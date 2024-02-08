@@ -39,6 +39,8 @@ pineconeindex = pc.Index("influencer-vectors")
 
 # import emoji
 
+#this portion can be replaced by whatever list of guids you wish to make embeddings for as long as you have them in the notebook or can access them programattically
+
 # guid_values = qual_inf['guid'].tolist()
 with open('data_guids.txt', 'r') as file:
     # Read all the lines of the file into a list
@@ -60,6 +62,8 @@ for val_guid in range(len(guid_values)):
 #     print(guid)
     TIME_PERIOD = 12 # do not change this 
     file_name = str(TIME_PERIOD)+'_'+guid+'.json'
+
+    #this can be replaced by the download avro function from linqia jupyter if accessing data from aws directly
     f = open("notebook/AvroDataJson/" + guid + '.json')
     avro_data = json.load(f)
 
