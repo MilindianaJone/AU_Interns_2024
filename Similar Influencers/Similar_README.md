@@ -8,7 +8,7 @@ Use case: Customers often provide examples of influencers they like, which are u
 
 **Code Utilization**
 
-Run the file _Similar Influencers Nice Dash.py _ to visualize the Dash app. Choose yes if you like the influencer, no if you don't, easy as that.
+Run the file _Similar Influencers Nice Dash.py_ to visualize the Dash app. Choose yes if you like the influencer, no if you don't, easy as that.
 
 _Similar Influencers Vector Generation.py_ details how the vectors were generated.
 
