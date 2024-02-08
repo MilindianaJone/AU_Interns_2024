@@ -25,15 +25,14 @@ import numpy as np
 from pinecone import Pinecone
 import numpy as np
 
+# Specific API connected to Intern Pinecone account
 pc = Pinecone(api_key="55616add-2e3f-4b54-8907-ac36421b6b58")
 index = pc.Index("influencer-vectors")
 print("Pinecone Index created successfully!")
 
-
-
 app = dash.Dash(__name__)
 
-
+# Test GUIDS
 guid = "00004a5a-da8f-4924-b4b6-e0da6097caee"
 # guid = "00091885-70d1-4833-a482-ed457de08bb8"
 # guid = "0045b824-76bf-4160-a770-45d8855db1be"
@@ -116,15 +115,17 @@ app.layout = html.Div(
     ]
 )
 
+# Store the handles of the influencers user says yes to
 selected_handles = []
 
+# Store the guids of influencers user says yes and no to
 yes_guids = []
 no_guids = []
 
 
 def update_profile_index(current_guid, yes_guids, no_guids):
 
-
+    # Get all vectors user has said yes to
     fetched_yes = index.fetch(ids = yes_guids)
     # fetched_no = index.fetch(ids = no_guids)
     
@@ -135,9 +136,9 @@ def update_profile_index(current_guid, yes_guids, no_guids):
         vector = yes_vectors[id]['values']
         yes_vector_list.append(vector)
 
+    # Find the average vector of the vectors said yes to
     yes_vector_np = np.array(yes_vector_list)
     average_vector_yes = np.mean(yes_vector_np, axis=0)
-
 
     average_vector_no = np.zeros(1024)
 
@@ -151,17 +152,19 @@ def update_profile_index(current_guid, yes_guids, no_guids):
             vector = no_vectors[id]['values']
             no_vector_list.append(vector)
 
+        # Find the average vector of the vectors said no to
         no_vector_np = np.array(no_vector_list)
         average_vector_no = np.mean(no_vector_np, axis=0)/2
-
-
+    
+    # Find the true average of both the yes and no results
     average_vector = average_vector_yes - average_vector_no
-
 
     num_queries = len(yes_guids) + len(no_guids) + 1
 
+    # Find the most similar influencer based on average vector
     results = index.query(vector=average_vector.tolist(), top_k=num_queries) 
-
+    
+    # Find similarity score for the similar influencer found
     people = results['matches']
     for person in people:
         if person['id'] not in yes_guids and person['id'] not in no_guids:
@@ -170,8 +173,6 @@ def update_profile_index(current_guid, yes_guids, no_guids):
             similarity = np.floor(person['score']*100)
             print(similarity)
             break
-
-    
 
     return (current_guid,similarity)
 
